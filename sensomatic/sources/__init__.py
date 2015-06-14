@@ -1,0 +1,1 @@
+from sensomatic.sources.weather import OpenWeatherMapTemperature

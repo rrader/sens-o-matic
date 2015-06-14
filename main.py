@@ -1,7 +1,6 @@
-import requests
-import rx
-from rx import Observable, Observer
-
+from rx import Observer
+from sensomatic.sensors.weather import weather_sensor
+import sensomatic.sources.defaults
 
 class MyObserver(Observer):
     def on_next(self, x):
@@ -13,9 +12,5 @@ class MyObserver(Observer):
     def on_completed(self):
         print("Sequence completed")
 
-def weather(city):
-    w = requests.get('http://api.openweathermap.org/data/2.5/weather?q={}'.format(city)).json()
-    return w['main']['temp']/10
 
-sensor = Observable.interval(30000).map(lambda d: weather('Kiev,UA')).retry().distinct_until_changed()
-sensor.subscribe(MyObserver())
+weather_sensor['Kiev,UA'].subscribe(MyObserver())
