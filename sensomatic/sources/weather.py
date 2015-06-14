@@ -1,9 +1,13 @@
 import requests
-from sensomatic.sources.utils import data_source, set_default
+from sensomatic.sources.utils import data_source
 
 
 @data_source
 class OpenWeatherMapTemperature:
+    """
+    Example of source. Provides temperature for the city specified in the constructor.
+    Retrieves temperature from the openweathermap.org API.
+    """
     provides = 'temperature_for_city'
 
     def __init__(self, city):

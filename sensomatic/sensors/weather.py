@@ -7,7 +7,15 @@ __all__ = ['weather_sensor']
 MINUTES_5 = 5 * 60 * 1000
 
 
-class WeatherSensor:
+class WebTemperatureSensor:
+    """
+    Sensor factory provides Observable singleton objects for every city.
+    It has dict-like interface, e.g. to get temperature in the Kiev,UA
+    you can do
+    >>> weather_sensor['Kiev,UA'].subscribe(...)
+    Every time you'll get same Observable object
+    >>> weather_sensor['Kiev,UA']) == weather_sensor['Kiev,UA'])  ->  True
+    """
     def __init__(self):
         self.sensors = {}
 
@@ -21,4 +29,4 @@ class WeatherSensor:
         return Observable.from_iterable_with_interval(MINUTES_5, source).retry().distinct_until_changed()
 
 
-weather_sensor = WeatherSensor()
+weather_sensor = WebTemperatureSensor()
