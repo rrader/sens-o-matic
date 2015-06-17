@@ -1,6 +1,5 @@
 from rx import Observer
-from sensomatic.sensors.weather import weather_sensor
-import sensomatic.sources.defaults
+from sensomatic.sensors.examples import weather_sensor
 
 
 class MyObserver(Observer):

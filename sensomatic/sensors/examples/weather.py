@@ -1,3 +1,7 @@
+"""
+More complex sensor example, it's sensor factory for different cities.
+"""
+
 from rx import Observable
 from sensomatic.sources.utils import get_source
 
