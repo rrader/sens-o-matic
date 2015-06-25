@@ -27,7 +27,7 @@ class MissingRequiredDefaultSource(Exception):
     """
     This exception will be raised if you didn't set default source for sources kind.
     Maybe you didn't import defaults?
-    >>> import sensomatic.sources.examples.defaults
+    >>> import sensomatic.sources.defaults
     """
     pass
 
