@@ -1,8 +1,29 @@
 import asyncio
 import json
-import aiohttp
+import logging
 import os
+import threading
 from aiohttp import web
+from rx import Observer
+from sensomatic.sources import defaults
+from sensomatic.sensors.reed_switch import reed_switch_sensor
+
+
+class GPIOObserver(Observer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(">>>> ", threading.current_thread().name)
+        self.queue = asyncio.Queue()
+        logging.debug("GPIOObserver created")
+
+    def on_next(self, new_value):
+        print(">>>> ", threading.current_thread().name)
+        logging.debug("value {} arrived".format(new_value))
+        asyncio.async(self.queue.put(new_value))
+        logging.info("value is in the queue!")
+
+    def on_error(self, e):
+        logging.error("Got error: {}".format(e))
 
 
 class Server:
@@ -38,21 +59,28 @@ class Server:
                 })
             )
             ws.close()
+        # observer = GPIOObserver(loop=asyncio.get_event_loop())
+        observer = GPIOObserver()
+        reed_switch_sensor.subscribe(observer)
+        logging.info("new listener registered")
         ws.send_str(json.dumps({'$type': 'subscribedOK', 'sensorName': request['sensorName']}))
 
         while True:
-            msg = yield from ws.receive()
-            # if msg.tp == aiohttp.MsgType.text:
-            #     pass
-            # elif msg.tp == aiohttp.MsgType.close:
-            #     print('websocket connection closed')
-            # elif msg.tp == aiohttp.MsgType.error:
-            #     print('ws connection closed with exception %s',
-            #           ws.exception())
+            logging.info("waiting for the new value")
+            value = yield from observer.queue.get()
+            logging.info("sending new value to WS")
+            ws.send_str(json.dumps(
+                {
+                    '$type': 'dataReceived',
+                    'sensorName': request['sensorName'],
+                    'value': value.value,
+                    'timestamp': value.timestamp.isoformat()
+                })
+            )
 
         return ws
 
-    def create_app(self, ):
+    def create_app(self):
         app = web.Application()
         app.router.add_route('GET', '/', self.hello)
         app.router.add_route('GET', '/updates', self.websocket_handler)
@@ -75,3 +103,4 @@ class Server:
         self.srv.close()
         loop.run_until_complete(self.srv.wait_closed())
         loop.run_until_complete(self.app.finish())
+

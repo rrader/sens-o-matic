@@ -1,4 +1,5 @@
-from rx import Observable
+from rx import Observable, AnonymousObservable
+from rx.concurrency import current_thread_scheduler
 from rx.internal import extensionclassmethod
 
 

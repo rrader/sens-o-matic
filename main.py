@@ -17,13 +17,16 @@
 # # weather_sensor['Kiev,UA'].subscribe(MyObserver())
 # reed_switch_sensor.subscribe(MyObserver())
 import asyncio
+import logging
+from sensomatic.rxutils.scheduler import loop
 from sensomatic.ui.server import Server
 
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
     server = Server()
 
-    loop = asyncio.get_event_loop()
+    # loop = asyncio.get_event_loop()
     try:
         loop.run_forever()
     except KeyboardInterrupt:

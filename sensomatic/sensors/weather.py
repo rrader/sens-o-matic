@@ -3,6 +3,7 @@ More complex sensor example, it's sensor factory for different cities.
 """
 
 from rx import Observable
+from sensomatic.rxutils.scheduler import aio_scheduler
 from sensomatic.sources.utils import get_source
 
 __all__ = ['weather_sensor']
@@ -30,7 +31,10 @@ class WebTemperatureSensor:
         return self.sensors[item]
 
     def create(self, source):
-        return Observable.from_iterable_with_interval(MINUTES_5, source).retry().distinct_until_changed()
+        return Observable.\
+            from_iterable_with_interval(MINUTES_5, source, scheduler=aio_scheduler).\
+            retry().\
+            distinct_until_changed()
 
 
 weather_sensor = WebTemperatureSensor()
