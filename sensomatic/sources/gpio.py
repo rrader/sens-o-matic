@@ -1,5 +1,4 @@
 from sensomatic.sources.utils import data_source
-import RPi.GPIO as GPIO
 
 
 @data_source
@@ -12,16 +11,14 @@ class ReedSwitch5Events:
     provides = 'reed_switch_5'
 
     def __init__(self):
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        import RPi.GPIO as GPIO
+        self.GPIO = GPIO
+
+        self.GPIO.setmode(self.GPIO.BOARD)
+        self.GPIO.setup(self.PIN, self.GPIO.IN, pull_up_down=self.GPIO.PUD_UP)
 
     def __next__(self):
-        return GPIO.input(self.PIN)
-        # while True:
-        #     new_value = GPIO.input(PIN)
-        #     if value != new_value:
-        #         return new_value
-        #     sleep(0.5)
+        return self.GPIO.input(self.PIN)
 
     def __iter__(self):
         return self

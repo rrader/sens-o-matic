@@ -5,8 +5,11 @@ import os
 import threading
 from aiohttp import web
 from rx import Observer
+from react import jsx
+
 from sensomatic.sources import defaults
-from sensomatic.sensors.reed_switch import reed_switch_sensor
+#from sensomatic.sensors.reed_switch import reed_switch_sensor
+from sensomatic.sensors.test_file import file_content_sensor
 
 
 class GPIOObserver(Observer):
@@ -61,7 +64,7 @@ class Server:
             ws.close()
         # observer = GPIOObserver(loop=asyncio.get_event_loop())
         observer = GPIOObserver()
-        reed_switch_sensor.subscribe(observer)
+        file_content_sensor['/tmp/tst'].subscribe(observer)
         logging.info("new listener registered")
         ws.send_str(json.dumps({'$type': 'subscribedOK', 'sensorName': request['sensorName']}))
 
@@ -80,13 +83,26 @@ class Server:
 
         return ws
 
+    @asyncio.coroutine
+    def static_handler(self, request):
+        path = request.match_info['path']
+        full_path = os.path.join(os.path.dirname(__file__), 'static', path)
+        content = open(full_path, 'br').read()
+        if full_path.endswith('.jsx'):
+            print("jsx")
+            transformer = jsx.JSXTransformer()
+            content = transformer.transform_string(content.decode()).encode()
+
+        return web.Response(body=content)
+
     def create_app(self):
         app = web.Application()
-        app.router.add_route('GET', '/', self.hello)
+        # app.router.add_route('GET', '/', self.hello)
         app.router.add_route('GET', '/updates', self.websocket_handler)
-        app.router.add_static('/ui',
-                              os.path.join(os.path.dirname(__file__), 'static'),
-                              name='static')
+        app.router.add_route('GET', '/ui/{path:.*}', self.static_handler)
+        # app.router.add_static('/ui',
+        #                       os.path.join(os.path.dirname(__file__), 'static'),
+        #                       name='static')
         return app
 
     def create_http_server(self):

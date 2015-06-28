@@ -1,6 +1,8 @@
 """
-Simple sensor example that generates events based on UAH currency change.
+Sensor generates events based on value change on GPIO. GPIO#5 configured to for pull-up resistor,
+and the reed switch should be connected to pin#5 and ground to make it work.
 """
+
 from rx import Observable
 from sensomatic.rxutils.scheduler import aio_scheduler
 from sensomatic.sources.utils import get_source

@@ -24,7 +24,6 @@ function SocketService() {
         console.log(message);
 
         var parsed = JSON.parse(message.data);
-        // If an object exists with id in our subscriptions object, resolve it
         callback(parsed);
     };
 

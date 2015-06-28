@@ -2,13 +2,48 @@
 <html>
 <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
-    <title>Simple Example with websockets</title>
+    <title>Sens-o-matic</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
     <link rel="stylesheet" href="css/base.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.8.0/react.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-<script src="js/sensorSocketService.js"></script>
-<script src="js/sensor.js"></script>
+    <script src="js/sensorSocketService.js"></script>
+    <script src="js/sensor.jsx"></script>
+
+    <nav class="navbar navbar-inverse navbar-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Sens-o-matic</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+<!--             <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li> -->
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+        <div id="content"></div>
+
+    </div><!-- /.container -->
+
+<script src="js/main.jsx"></script>
+
 </body>
 </html>
