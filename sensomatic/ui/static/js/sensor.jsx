@@ -14,6 +14,7 @@ var SensorBox = React.createClass({
                 console.log('Value "' + message + '" pushed for sensor "' + sensorName + '"');
             }
             if (message.$type === 'subscribedOK') {
+                this.metadata = message.sensorStaticData;
                 console.log('Subscribed for updates on sensor "' + message.sensorName + '"');
             }
         }.bind(this));
@@ -28,8 +29,12 @@ var SensorBox = React.createClass({
         return (
             <div className="panel panel-default sensorBox">
                 <div className="panel-heading">Sensor {this.props.sensorName} History</div>
+                <img src={"/ui/img/" + this.props.sensorName + '.png'}
+                     className="img-rounded pull-left" alt="logo"
+                     width="100"
+                     />
                 <div className="panel-body">
-                    <SensorHistoryList data={this.state.data} />
+                    <SensorHistoryList data={this.state.data} metadata={this.metadata} />
                 </div>
             </div>
             );
@@ -38,16 +43,12 @@ var SensorBox = React.createClass({
 
 var SensorHistoryList = React.createClass({
     render: function () {
+        var self = this;
         var sensorHistoryList = this.props.data.map(function (value, index) {
             var date = new Date(value.timestamp);
-            var readable;
-            if (value.value == '0') {
-                readable = "Door is opened"
-            } else
-            if (value.value == '1') {
-                readable = "Door is closed"
-            } else {
-                readable = "Unknown state... :("
+            var readable = self.props.metadata['values'][value.value];
+            if (readable === undefined) {
+                readable = 'unknown value';
             }
 
             return (

@@ -25,6 +25,7 @@ function SocketService() {
 
         var parsed = JSON.parse(message.data);
         callback(parsed);
+        ws.send('ok');
     };
 
     function subscribe(name, cb) {

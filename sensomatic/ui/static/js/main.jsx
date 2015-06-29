@@ -1,5 +1,5 @@
 
 React.renderComponent(
-    SensorBox({sensorName: 'door'}),
+    SensorBox({sensorName: 'file'}),
     document.getElementById('content')
 );
