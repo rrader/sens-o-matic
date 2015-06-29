@@ -5,6 +5,7 @@ chardet==2.3.0
 docutils==0.12
 Jinja2==2.7.3
 MarkupSafe==0.23
+peewee==2.6.1
 PyExecJS==1.1.0
 Pygments==2.0.2
 PyReact==0.5.2

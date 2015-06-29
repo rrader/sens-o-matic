@@ -1,4 +1,3 @@
-import threading
 import asyncio
 from rx.concurrency import AsyncIOScheduler
 from rx.disposables import SingleAssignmentDisposable, CompositeDisposable, Disposable
@@ -36,4 +35,3 @@ class MyScheduler(AsyncIOScheduler):
 
 loop = asyncio.get_event_loop()
 aio_scheduler = MyScheduler(loop=loop)
-print(threading.current_thread().name)

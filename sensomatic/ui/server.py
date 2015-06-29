@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from aiohttp import web
 
 from sensomatic.sources import defaults
@@ -23,7 +24,7 @@ class Server:
         srv = loop.run_until_complete(
             loop.create_server(self.handler, '0.0.0.0', 8080)
         )
-        print('will be serving on', srv.sockets[0].getsockname())
+        logging.info('will be serving on {}'.format(srv.sockets[0].getsockname()))
         return srv
 
     def finalize(self):

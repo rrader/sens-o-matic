@@ -4,9 +4,11 @@ import logging
 from aiohttp import web
 import aiohttp
 from rx import Observer
-from sensomatic.ui.sensor_utils import KNOWN_SENSORS
+from sensomatic.ui.sensors_config import KNOWN_SENSORS
 
 AUTODISPOSING_QUEUE_SIZE_THRESHOLD = 5
+
+logger = logging.getLogger('WS')
 
 
 def aiohttp_class_handler(cls):
@@ -22,19 +24,19 @@ class AIOQueueObserver(Observer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queue = asyncio.Queue()
-        logging.debug("AIOQueueObserver created")
+        logger.debug("AIOQueueObserver created")
 
     def on_next(self, new_value):
-        logging.debug("value {} arrived".format(new_value))
+        logger.debug("value {} arrived".format(new_value))
         asyncio.async(self.queue.put(new_value))
-        logging.debug("value is in the queue!")
+        logger.debug("value is in the queue!")
 
         if self.queue.qsize() > AUTODISPOSING_QUEUE_SIZE_THRESHOLD:
-            logging.info("queue size is growing, guess that reader was disconnected. disposing observer.")
+            logger.info("queue size is growing, guess that reader was disconnected. disposing observer.")
             self.dispose()
 
     def on_error(self, e):
-        logging.error("Got error: {}".format(e))
+        logger.error("Got error: {}".format(e))
 
 
 @aiohttp_class_handler
@@ -52,14 +54,14 @@ class DataStreamHandler:
 
         observer = AIOQueueObserver()
         sensor.subscribe(observer)
-        logging.info("new listener registered")
+        logger.info("new listener registered for '{}'".format(request['sensorName']))
         ws.send_str(json.dumps({'$type': 'subscribedOK', 'sensorName': request['sensorName'],
                                 'sensorStaticData': sensor_meta['meta']}))
 
         while True:
-            logging.info("waiting for the new value")
+            logger.debug("waiting for the new value")
             value = yield from observer.queue.get()
-            logging.info("sending new value to WS")
+            logger.info("sending new value to WS")
             ws.send_str(json.dumps(
                 {
                     '$type': 'dataReceived',
