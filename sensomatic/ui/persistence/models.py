@@ -6,7 +6,7 @@ db = SqliteDatabase('sensors.db')
 class Sensor(Model):
     name = CharField()
     value = CharField()
-    timestamp = DateField()
+    timestamp = DateTimeField()
 
     class Meta:
         database = db  # This model uses the "people.db" database.
