@@ -18,12 +18,11 @@ class PersistenceObserver(Observer):
 
     def on_next(self, new_value):
         last_record = get_last_record(self.sensor_name)
-        if last_record:
-          if last_record.value == new_value.value:
+        if last_record and last_record.value == str(new_value.value):
             logger.warning("value {} for sensor '{}' was duplicated (maybe server was restarted). Not saving to DB.".
                            format(new_value.value, self.sensor_name))
             return
-        Sensor.create(name=self.sensor_name, value=new_value.value, timestamp=new_value.timestamp)
+        Sensor.create(name=self.sensor_name, value=str(new_value.value), timestamp=new_value.timestamp)
         logger.debug("new value {} for '{}' saved to DB".format(new_value.value, self.sensor_name))
 
     def on_error(self, e):

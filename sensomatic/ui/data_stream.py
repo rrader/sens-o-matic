@@ -30,7 +30,7 @@ class AIOQueueObserver(Observer):
         logger.debug("AIOQueueObserver created")
 
     def on_next(self, new_value):
-        if self.last_record and self.last_record.value == new_value.value:
+        if self.last_record and str(self.last_record.value) == str(new_value.value):
             logger.warning("value {} for sensor '{}' was duplicated (happens every time new listener connected). "
                            "Not sending to WS.".format(new_value.value, self.sensor_name))
             return
