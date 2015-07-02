@@ -4,7 +4,7 @@ function SocketService() {
     var service = {};
 
     var ws = new WebSocket("ws://" + window.location.hostname + (location.port ? ':' + location.port : '') +
-                           window.location.pathname.split("/").slice(0, -1).join('/') + '/updates');
+                           window.location.pathname.split("/").slice(0, -2).join('/') + '/updates');
     var preConnectionRequests = [];
     var connected = false;
 

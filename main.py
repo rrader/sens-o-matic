@@ -12,7 +12,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     server = Server()
 
-    configure_persistence(sensors_list=['file'])
+    configure_persistence(sensors_list=['door'])
     try:
         loop.run_forever()
     except KeyboardInterrupt:
