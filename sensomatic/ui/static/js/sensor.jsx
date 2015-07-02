@@ -7,7 +7,7 @@ var SensorBox = React.createClass({
         var socket = new SocketService();
         var sensorName = this.props.sensorName;
 
-        socket.subscribe(sensorName, function (message) {
+        socket.subscribe(sensorName, 10, function (message) {
             if (message.$type === 'dataReceived') {
                 this.state.data.push(message);
                 this.setState({data: this.state.data});

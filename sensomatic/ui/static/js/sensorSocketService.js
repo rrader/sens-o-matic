@@ -28,9 +28,9 @@ function SocketService() {
         ws.send('ok');
     };
 
-    function subscribe(name, cb) {
+    function subscribe(name, historyLength, cb) {
         callback = cb;
-        var request = {$type: 'subscribe', sensorName: name}
+        var request = {$type: 'subscribe', sensorName: name, historyLength: historyLength}
         if (!connected) {
             console.log('Not connected yet, saving request', request);
             preConnectionRequests.push(request);

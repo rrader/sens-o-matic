@@ -79,7 +79,7 @@ class DataStreamHandler:
                    in Sensor.select().
                    where(Sensor.name == sensor_name).
                    order_by(Sensor.timestamp.desc()).
-                   limit(5)
+                   limit(request['historyLength'])
                    ]
         history = list(reversed(history))
 
