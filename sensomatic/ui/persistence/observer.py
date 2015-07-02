@@ -18,7 +18,7 @@ class PersistenceObserver(Observer):
 
     def on_next(self, new_value):
         last_record = get_last_record(self.sensor_name)
-        if last_record and last_record.value == str(new_value.value):
+        if last_record and str(last_record.value) == str(new_value.value):
             logger.warning("value {} for sensor '{}' was duplicated (maybe server was restarted). Not saving to DB.".
                            format(new_value.value, self.sensor_name))
             return
