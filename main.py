@@ -1,32 +1,18 @@
-# from rx import Observer
-# from sensomatic.sources import defaults
-# from sensomatic.sensors.reed_switch import reed_switch_sensor
-#
-#
-# class MyObserver(Observer):
-#     def on_next(self, x):
-#         print("Got: %s" % x)
-#
-#     def on_error(self, e):
-#         print("Got error: %s" % e)
-#
-#     def on_completed(self):
-#         print("Sequence completed")
-#
-#
-# # weather_sensor['Kiev,UA'].subscribe(MyObserver())
-# reed_switch_sensor.subscribe(MyObserver())
-import asyncio
 import logging
+import os
 from sensomatic.rxutils.scheduler import loop
+from sensomatic.ui.persistence.observer import configure_persistence
 from sensomatic.ui.server import Server
+
+
+os.environ["EXECJS_RUNTIME"] = "Node"
 
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
     server = Server()
 
-    # loop = asyncio.get_event_loop()
+    configure_persistence(sensors_list=['file'])
     try:
         loop.run_forever()
     except KeyboardInterrupt:

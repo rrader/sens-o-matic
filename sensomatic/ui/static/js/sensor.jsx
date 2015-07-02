@@ -15,6 +15,7 @@ var SensorBox = React.createClass({
             }
             if (message.$type === 'subscribedOK') {
                 this.metadata = message.sensorStaticData;
+                this.setState({data: message.history});
                 console.log('Subscribed for updates on sensor "' + message.sensorName + '"');
             }
         }.bind(this));
@@ -30,7 +31,7 @@ var SensorBox = React.createClass({
             <div className="panel panel-default sensorBox">
                 <div className="panel-heading">Sensor {this.props.sensorName} History</div>
                 <img src={"/ui/img/" + this.props.sensorName + '.png'}
-                     className="img-rounded pull-left" alt="logo"
+                     className="img-rounded pull-right" alt="logo"
                      width="100"
                      />
                 <div className="panel-body">
@@ -51,12 +52,17 @@ var SensorHistoryList = React.createClass({
                 readable = 'unknown value';
             }
 
-            return (
-                        <ul className="value">
-                            <li> { date.toString() }: { readable } </li>
-                        </ul>
-                    );
+            var style = {};
+            if (value['$type'] == 'dataReceived') {
+              style['color'] = 'gray';
+            }
+            return <li> <span style={style}> { date.toString() }: { readable } </span> </li>;
         });
-        return <div className="sensorHistoryList">{sensorHistoryList}</div>;
+        return (<div className="sensorHistoryList">
+                  <ul className="value">
+                    {sensorHistoryList}
+                  </ul>
+                </div>
+                );
     }
 });
