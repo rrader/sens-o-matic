@@ -30,7 +30,7 @@ var SensorBox = React.createClass({
         return (
             <div className="panel panel-default sensorBox">
                 <div className="panel-heading">Sensor {this.props.sensorName} History</div>
-                <img src={"/ui/img/" + this.props.sensorName + '.png'}
+                <img src={"img/" + this.props.sensorName + '.png'}
                      className="img-rounded pull-right" alt="logo"
                      width="100"
                      />
